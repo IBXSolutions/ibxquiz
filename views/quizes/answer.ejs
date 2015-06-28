@@ -6,12 +6,9 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
   </head>
   <body>
-    <h1>Bienvenidos a <%= title %></h1>
+    <h1><%= title %></h1>
     <h2>El juego de las preguntas</h2>
-    <p>Listado de preguntas:
-        <ul>
-            <li><a href="/quizes/question">Capital de Italia</li>
-        </ul>
-    </p>
+    <p>Tu respuesta <em><%= respuesta %></em> es <strong><%= resultado %></strong></p>
+    <p><a href="/quizes/question">Inténtalo otra vez</a></p>
   </body>
 </html>
