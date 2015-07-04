@@ -1,6 +1,3 @@
-//VARIABLES ESTATICAS
-var vTitulo = 'Quiz on Windows (by MHoz)';
-
 
 //GET /quizes/question
 exports.question = function (req, res) {
