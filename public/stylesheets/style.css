@@ -26,3 +26,11 @@ header, nav, section, footer {
 nav span {
     margin: 0px 10px 0px 0px;
 }
+#credits {
+    clear: both;
+    min-height: 100px;
+}
+#credits img {
+    float: left;
+    height: 100px;
+}

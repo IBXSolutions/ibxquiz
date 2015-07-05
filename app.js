@@ -26,6 +26,9 @@ app.use('/', routes);
 
 //VARIABLES GLOBALES
 vTitulo = 'Quiz on Windows (by MHoz)';
+vAuthorName = 'Miguel de la Hoz';
+vAuthorNick = 'MiguelHoz';
+vAuthorImg = '/images/avatar_mhoz.jpg';
 
 
 // catch 404 and forward to error handler
