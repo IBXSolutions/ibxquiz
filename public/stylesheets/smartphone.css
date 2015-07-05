@@ -1,7 +1,6 @@
 body {
     background: #333;
     font-size: xx-large;
-    padding: 2px;
 }
 #page-wrap::after {
     content: "Smartphone Layout";
@@ -11,10 +10,4 @@ h2 span, section h3 {
 }
 footer, input {
     font-size: large;
-}
-#credits img {
-    float: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
 }

@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-//var debug = require('debug')('ibx_quiz_win');
-var debug = require('debug')('ibxquiz');
+var debug = require('debug')('ibx_quiz_win');
 var app = require('../app');
 
 app.set('port', process.env.PORT || 3000);
