@@ -1,11 +1,23 @@
 var models = require('../models/models.js');
 
-//GET /quizes/question
-exports.question = function(req, res) {
-    models.Quiz.findAll().then(function(quiz) {
-        res.render('quizes/question', {
+//GET /quizes
+exports.index = function(req, res) {
+    models.Quiz.findAll().then(function(quizes) {
+        res.render('quizes/index', {
             title: vTitulo,
-            pregunta: quiz[0].pregunta
+            quizes: quizes
+        });
+    });
+};
+
+
+
+//GET /quizes/show
+exports.show = function(req, res) {
+    models.Quiz.find(req.params.quizId).then(function(quiz) {
+        res.render('quizes/show', {
+            title: vTitulo,
+            quiz: quiz
         });
     });
 };
@@ -13,8 +25,8 @@ exports.question = function(req, res) {
 //GET /quizes/answer
 exports.answer = function(req, res) {
     var vResultado;
-    models.Quiz.findAll().then(function(quiz) {
-        if (req.query.respuesta.toUpperCase() === quiz[0].respuesta.toUpperCase()) {
+    models.Quiz.find(req.params.quizId).then(function(quiz) {
+        if (req.query.respuesta.toUpperCase() === quiz.respuesta.toUpperCase()) {
             vResultado = 'Correct';
         } else {
             vResultado = 'Wrong';
@@ -23,7 +35,8 @@ exports.answer = function(req, res) {
         res.render('quizes/answer', {
             title: vTitulo,
             resultado: vResultado,
-            respuesta: req.query.respuesta
+            respuesta: req.query.respuesta,
+            quiz: quiz
         })
     })
 };
