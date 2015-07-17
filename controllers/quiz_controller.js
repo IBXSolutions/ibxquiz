@@ -34,7 +34,10 @@ exports.index = function(req, res) {
             order: "pregunta"
         };
     } else {
-        sqlBuscar = { where: ["1=1"], order: "pregunta" }
+        sqlBuscar = {
+            where: ["1=1"],
+            order: "pregunta"
+        }
     }
     console.log(sqlBuscar);
 
@@ -43,7 +46,8 @@ exports.index = function(req, res) {
         function(quizes) {
             res.render('quizes/index', {
                 title: vTitulo,
-                quizes: quizes
+                quizes: quizes,
+                errors: null
             });
         }
     ).catch(function(error) {
@@ -55,7 +59,8 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
     res.render('quizes/show', {
         title: vTitulo,
-        quiz: req.quiz
+        quiz: req.quiz,
+        errors: null
     });
 };
 
@@ -74,31 +79,50 @@ exports.answer = function(req, res) {
             title: vTitulo,
             resultado: vResultado,
             respuesta: laRespuesta,
-            quiz: req.quiz
+            quiz: req.quiz,
+            errors: null
         })
     })
 };
 
 // GET /quizes/new
 exports.new = function(req, res) {
-    var quiz = models.Quiz.build(
-        {
-            pregunta: "Tu pregunta",
-            respuesta: "La respuesta"
-        }
-    );
+    var quiz = models.Quiz.build({
+        pregunta: "Tu pregunta",
+        respuesta: "La respuesta"
+    });
     res.render('quizes/new', {
         title: vTitulo,
-        quiz: quiz
+        quiz: quiz,
+        errors: null
     });
 }
 
 // POST /quizes/create
-exports.create = function(req, res) {
-    var quiz = models.Quiz.build( req.body.quiz );
-    //Guardamos en DB los valores recibidos
-    quiz.save({fields: ["pregunta","respuesta"]}).then(function() {
+exports.create = function(req, res, err) {
+    var quiz = models.Quiz.build(req.body.quiz);
+
+    quiz.save({
+        fields: ["pregunta", "respuesta"]
+    }).then(function() {
         //Y redireccionamos a la lista de preguntas
         res.redirect('/quizes');
+    }).catch(function(err) {
+        console.log("Errores detectados\n" + objToString(err));
+        res.render('quizes/new', {
+            title: vTitulo,
+            errors: err,
+            quiz: quiz
+        });
     });
+}
+
+function objToString (obj) {
+    var str = '';
+    for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + '::' + obj[p] + '\n';
+        }
+    }
+    return str;
 }

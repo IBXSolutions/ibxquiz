@@ -5,7 +5,10 @@ var quizController = require('../controllers/quiz_controller');
 
 // GET home page.
 router.get('/', function(req, res) {
-  res.render('index', { title: vTitulo });
+  res.render('index', {
+      title: vTitulo,
+      errors: null
+   });
 });
 
 // GET About us
@@ -14,7 +17,8 @@ router.get('/author', function(req,res) {
         title: vTitulo,
         author: vAuthorName,
         nick: vAuthorNick,
-        imagen: vAuthorImg
+        imagen: vAuthorImg,
+        errors: null
         });
 });
 

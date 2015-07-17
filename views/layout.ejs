@@ -32,7 +32,14 @@
         </nav>
 
         <section class="main" id="s1">
-            <%- body %>
+            <% if (errors != null) { %>
+                <span id="ErrorMsgs"><strong>Errores detectados:</strong><br/>
+                <% for (var i in errors) { %>
+                    <span><%= i +' '+errors[i] %></span><br/>
+                <% } %>
+                </span>
+            <% } %>
+            <div><%- body %></div>
         </section>
 
         <footer class="main" id="f1">

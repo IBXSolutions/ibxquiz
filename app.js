@@ -48,7 +48,8 @@ if (app.get('env') === 'development') {
         res.render('error', {
             title: vTitulo,
             message: err.message,
-            error: err
+            error: err,
+            errors: null
         });
     });
 }
@@ -60,7 +61,8 @@ app.use(function(err, req, res, next) {
     res.render('error', {
         title: vTitulo,
         message: err.message,
-        error: {}
+        error: {},
+        errors: null
     });
 });
 

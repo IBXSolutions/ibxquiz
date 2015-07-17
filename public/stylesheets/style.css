@@ -40,3 +40,7 @@ nav span {
 #tbPreguntas td {
     padding: 10px;
 }
+#ErrorMsgs {
+    color: #f61;
+    font-size: smaller;
+}
