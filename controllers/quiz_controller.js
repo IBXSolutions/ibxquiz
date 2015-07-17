@@ -16,7 +16,7 @@ exports.load = function(req, res, next, quizId) {
     });
 }
 
-//GET /quizes
+//GET /quizes && /quizes/:buscar
 exports.index = function(req, res) {
     var sqlBuscar;
     var cadenaBusca = "";
@@ -38,7 +38,7 @@ exports.index = function(req, res) {
     }
     console.log(sqlBuscar);
 
-
+    // Finalmente realizamos la busqueda en bbdd
     models.Quiz.findAll(sqlBuscar).then(
         function(quizes) {
             res.render('quizes/index', {
@@ -51,8 +51,6 @@ exports.index = function(req, res) {
     });
 };
 
-
-
 //GET /quizes/show
 exports.show = function(req, res) {
     res.render('quizes/show', {
@@ -64,20 +62,43 @@ exports.show = function(req, res) {
 //GET /quizes/answer
 exports.answer = function(req, res) {
     var vResultado = 'Wrong';
+    var laRespuesta = req.query.respuesta;
+    //escapa caracteres reservados de expresiones regulares
+    laRespuesta = laRespuesta.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
     models.Quiz.find(req.params.quizId).then(function(quiz) {
-        if (req.query.respuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
+        if (laRespuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
             vResultado = 'Correct';
         }
 
         res.render('quizes/answer', {
             title: vTitulo,
             resultado: vResultado,
-            respuesta: req.query.respuesta,
+            respuesta: laRespuesta,
             quiz: req.quiz
         })
     })
 };
 
-// GET :buscar (Buscador)
-exports.search = function(req, res, buscar) {
+// GET /quizes/new
+exports.new = function(req, res) {
+    var quiz = models.Quiz.build(
+        {
+            pregunta: "Tu pregunta",
+            respuesta: "La respuesta"
+        }
+    );
+    res.render('quizes/new', {
+        title: vTitulo,
+        quiz: quiz
+    });
+}
+
+// POST /quizes/create
+exports.create = function(req, res) {
+    var quiz = models.Quiz.build( req.body.quiz );
+    //Guardamos en DB los valores recibidos
+    quiz.save({fields: ["pregunta","respuesta"]}).then(function() {
+        //Y redireccionamos a la lista de preguntas
+        res.redirect('/quizes');
+    });
 }

@@ -9,7 +9,7 @@ body {
 h2 span, section h3 {
     display: none;
 }
-footer, input {
+footer, input, button {
     font-size: large;
 }
 #credits img {
@@ -17,4 +17,7 @@ footer, input {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+.rem {
+    display: none;
 }
