@@ -18,7 +18,28 @@ exports.load = function(req, res, next, quizId) {
 
 //GET /quizes
 exports.index = function(req, res) {
-    models.Quiz.findAll().then(
+    var sqlBuscar;
+    var cadenaBusca = "";
+    if (req.query.buscar != "" && req.query.buscar != undefined) {
+        cadenaBusca = cadenaBusca + req.query.buscar;
+        //escapa caracteres reservados de expresiones regulares
+        cadenaBusca = cadenaBusca.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
+        //Sustituye los espacios inermedios por %
+        cadenaBusca = cadenaBusca.replace(/\s+/g, "%");
+        //Añadimos los % en los extremos
+        cadenaBusca = "%" + cadenaBusca + "%";
+        // Ahora montamos los parametros de Sequelize
+        sqlBuscar = {
+            where: ["pregunta like ?", cadenaBusca],
+            order: "pregunta"
+        };
+    } else {
+        sqlBuscar = { where: ["1=1"], order: "pregunta" }
+    }
+    console.log(sqlBuscar);
+
+
+    models.Quiz.findAll(sqlBuscar).then(
         function(quizes) {
             res.render('quizes/index', {
                 title: vTitulo,
@@ -56,3 +77,7 @@ exports.answer = function(req, res) {
         })
     })
 };
+
+// GET :buscar (Buscador)
+exports.search = function(req, res, buscar) {
+}

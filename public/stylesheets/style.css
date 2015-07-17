@@ -34,3 +34,9 @@ nav span {
     float: left;
     height: 100px;
 }
+#tbPreguntas {
+    width: 100%;
+}
+#tbPreguntas td {
+    padding: 10px;
+}
