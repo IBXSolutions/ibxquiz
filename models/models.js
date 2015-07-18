@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path');
 
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database

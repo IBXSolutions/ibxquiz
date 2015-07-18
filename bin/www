@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-//var debug = require('debug')('ibx_quiz_win');
 var debug = require('debug')('ibxquiz');
 var app = require('../app');
 
