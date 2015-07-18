@@ -100,7 +100,7 @@ exports.new = function(req, res) {
 
 // POST /quizes/create
 exports.create = function(req, res, err) {
-    var quiz = models.Quiz.build(req.body.quiz);
+    req.quiz = models.Quiz.build(req.body.quiz);
 
     quiz.save({
         fields: ["pregunta", "respuesta"]
@@ -129,25 +129,27 @@ exports.edit = function(req, res) {
 
 // PUT /quizes/:quizId
 exports.update = function(req, res) {
-    var quiz = models.Quiz.build(req.body.quiz);
+    req.quiz.pregunta = req.body.quiz.pregunta;
+    req.quiz.respuesta = req.body.quiz.respuesta;
 
-    quiz.save({
-        fields: ["pregunta", "respuesta"]
-    }).then(function() {
-        //Y redireccionamos a la lista de preguntas
-        res.redirect('/quizes');
-    }).catch(function(err) {
-        console.log("Errores detectados al actualizar\n" + objToString(err));
-        res.render('quizes/edit', {
-            title: vTitulo,
-            errors: err,
-            quiz: quiz
+    req.quiz
+        .save({
+            fields: ["pregunta", "respuesta"]
+        }).then(function() {
+            //Y redireccionamos a la lista de preguntas
+            res.redirect('/quizes');
+        }).catch(function(err) {
+            console.log("Errores detectados al actualizar\n" + objToString(err));
+            res.render('quizes/edit', {
+                title: vTitulo,
+                errors: err,
+                quiz: quiz
+            });
         });
-    });
 }
 
 // Otras funciones utiles
-function objToString (obj) {
+function objToString(obj) {
     var str = '';
     for (var p in obj) {
         if (obj.hasOwnProperty(p)) {
