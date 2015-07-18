@@ -115,8 +115,38 @@ exports.create = function(req, res, err) {
             quiz: quiz
         });
     });
+};
+
+// GET quizes/:quizId/edit
+exports.edit = function(req, res) {
+    var quiz = req.quiz; //Ya cargado en el Autoload
+    res.render('quizes/edit', {
+        title: vTitulo,
+        quiz: quiz,
+        errors: null
+    });
+};
+
+// PUT /quizes/:quizId
+exports.update = function(req, res) {
+    var quiz = models.Quiz.build(req.body.quiz);
+
+    quiz.save({
+        fields: ["pregunta", "respuesta"]
+    }).then(function() {
+        //Y redireccionamos a la lista de preguntas
+        res.redirect('/quizes');
+    }).catch(function(err) {
+        console.log("Errores detectados al actualizar\n" + objToString(err));
+        res.render('quizes/edit', {
+            title: vTitulo,
+            errors: err,
+            quiz: quiz
+        });
+    });
 }
 
+// Otras funciones utiles
 function objToString (obj) {
     var str = '';
     for (var p in obj) {
