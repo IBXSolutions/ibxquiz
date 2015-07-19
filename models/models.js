@@ -25,11 +25,19 @@ var sequelize = new Sequelize(DB_name, user, pwd, {
     omitNull: true //solo Postgres
 });
 
-//Importamos la definiciñon de la tabla Quiz
+// Importamos la definiciñon de la tabla Quiz
 var quiz_path = path.join(__dirname, 'quiz');
 var Quiz = sequelize.import(quiz_path);
+// Importamos la definicion de la tabla Comment
+var Comment = sequelize.import(path.join(__dirname, 'comments'))
+
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
+
 //Y la exportamos
 exports.Quiz = Quiz;
+exports.Comment = Comment;
+
 
 //sequelize.sync() crea e inicializa la tabla de preguntas
 sequelize.sync().then(function() {

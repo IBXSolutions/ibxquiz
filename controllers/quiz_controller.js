@@ -3,7 +3,14 @@ var constantes = models.Constantes;
 
 // Autoload - factoriza req.quiz si ruta incluye :quizId
 exports.load = function(req, res, next, quizId) {
-    models.Quiz.find(quizId).then(
+    models.Quiz.find({
+        where: {
+            id: Number(quizId)
+        },
+        include: [{
+            model: models.Comment
+        }]
+    }).then(
         function(quiz) {
             if (quiz) {
                 req.quiz = quiz;
@@ -20,21 +27,21 @@ exports.load = function(req, res, next, quizId) {
 
 // GET home_page
 exports.home = function(req, res) {
-  res.render('index', {
-      title: constantes.TITULO,
-      errors: null
-   });
+    res.render('index', {
+        title: constantes.TITULO,
+        errors: null
+    });
 };
 
 // GET About us
-exports.author = function(req,res) {
+exports.author = function(req, res) {
     res.render('author', {
         title: constantes.TITULO,
         author: constantes.AUTHORNAME,
         nick: constantes.AUTHORNICK,
         imagen: constantes.AUTHORIMG,
         errors: null
-        });
+    });
 };
 
 
@@ -66,6 +73,7 @@ exports.index = function(req, res) {
     // Finalmente realizamos la busqueda en bbdd
     models.Quiz.findAll(sqlBuscar).then(
         function(quizes) {
+
             res.render('quizes/index', {
                 title: constantes.TITULO,
                 quizes: quizes,
@@ -79,6 +87,7 @@ exports.index = function(req, res) {
 
 //GET /quizes/show
 exports.show = function(req, res) {
+    console.log('Mostrando el quiz:\n' + JSON.stringify(req.quiz));
     res.render('quizes/show', {
         title: constantes.TITULO,
         quiz: req.quiz,
