@@ -1,5 +1,4 @@
-'use strict';
-
+console.log('aqui');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,8 +8,12 @@ var bodyParser = require('body-parser');
 var partials = require('express-partials');
 var methodOverride = require('method-override');
 
+
 //Importamos nuestro router
 var routes = require('./routes/index');
+// Importamos las constantes
+var models = require('./models/models');
+var constantes = models.Constantes;
 
 var app = express();
 
@@ -28,13 +31,8 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
 
-//VARIABLES GLOBALES
-vTitulo = 'Quiz on Windows (by MHoz)';
-vAuthorName = 'Miguel de la Hoz';
-vAuthorNick = 'MiguelHoz';
-vAuthorImg = '/images/avatar_mhoz.jpg';
+app.use('/', routes);
 
 
 // catch 404 and forward to error handler
@@ -44,6 +42,7 @@ app.use(function(req, res, next) {
     next(err);
 });
 
+
 // error handlers
 
 // development error handler
@@ -52,7 +51,7 @@ if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
-            title: vTitulo,
+            title: constantes.TITULO,
             message: err.message,
             error: err,
             errors: null
@@ -65,7 +64,7 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
-        title: vTitulo,
+        title: constantes.TITULO,
         message: err.message,
         error: {},
         errors: null

@@ -1,5 +1,5 @@
-'use strict';
 var models = require('../models/models.js');
+var constantes = models.Constantes;
 
 // Autoload - factoriza el código si ruta incluye :quizId
 exports.load = function(req, res, next, quizId) {
@@ -21,7 +21,7 @@ exports.load = function(req, res, next, quizId) {
 // GET home_page
 exports.home = function(req, res) {
   res.render('index', {
-      title: vTitulo,
+      title: constantes.TITULO,
       errors: null
    });
 };
@@ -29,10 +29,10 @@ exports.home = function(req, res) {
 // GET About us
 exports.author = function(req,res) {
     res.render('author', {
-        title: vTitulo,
-        author: vAuthorName,
-        nick: vAuthorNick,
-        imagen: vAuthorImg,
+        title: constantes.TITULO,
+        author: constantes.AUTHORNAME,
+        nick: constantes.AUTHORNICK,
+        imagen: constantes.AUTHORIMG,
         errors: null
         });
 };
@@ -67,7 +67,7 @@ exports.index = function(req, res) {
     models.Quiz.findAll(sqlBuscar).then(
         function(quizes) {
             res.render('quizes/index', {
-                title: vTitulo,
+                title: constantes.TITULO,
                 quizes: quizes,
                 errors: null
             });
@@ -80,7 +80,7 @@ exports.index = function(req, res) {
 //GET /quizes/show
 exports.show = function(req, res) {
     res.render('quizes/show', {
-        title: vTitulo,
+        title: constantes.TITULO,
         quiz: req.quiz,
         errors: null
     });
@@ -97,7 +97,7 @@ exports.answer = function(req, res) {
             vResultado = 'Correct';
         }
         res.render('quizes/answer', {
-            title: vTitulo,
+            title: constantes.TITULO,
             resultado: vResultado,
             respuesta: laRespuesta,
             quiz: req.quiz,
@@ -113,7 +113,7 @@ exports.new = function(req, res) {
         respuesta: "La respuesta"
     });
     res.render('quizes/new', {
-        title: vTitulo,
+        title: constantes.TITULO,
         quiz: quiz,
         errors: null
     });
@@ -133,7 +133,7 @@ exports.create = function(req, res, err) {
         console.log('No se ha creado la pregunta:\n' + quiz);
         console.log("Errores detectados\n" + objToString(err));
         res.render('quizes/new', {
-            title: vTitulo,
+            title: constantes.TITULO,
             errors: err,
             quiz: quiz
         });
@@ -144,7 +144,7 @@ exports.create = function(req, res, err) {
 exports.edit = function(req, res) {
     var quiz = req.quiz; //Ya cargado en el Autoload
     res.render('quizes/edit', {
-        title: vTitulo,
+        title: constantes.TITULO,
         quiz: quiz,
         errors: null
     });
@@ -166,7 +166,7 @@ exports.update = function(req, res) {
             console.log('No se ha actualizado la pregunta:\n' + req.quiz);
             console.log("Errores detectados al actualizar\n" + objToString(err));
             res.render('quizes/edit', {
-                title: vTitulo,
+                title: constantes.TITULO,
                 errors: err,
                 quiz: quiz
             });

@@ -1,5 +1,3 @@
-'use strict';
-
 var path = require('path');
 
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
@@ -41,14 +39,16 @@ sequelize.sync().then(function() {
             //La tabla solo se inicializa si esta vacia
             Quiz.create({
                     pregunta: 'Capital de Italia',
-                    respuesta: 'Roma'
+                    respuesta: 'Roma',
+                    tema: 'Geografía'
                 })
                 .then(function() {
                     console.log('Primer registro creado')
                 });
             Quiz.create({
                     pregunta: 'Capital de España',
-                    respuesta: 'Madrid'
+                    respuesta: 'Madrid',
+                    tema: 'Geografía'
                 })
                 .then(function() {
                     console.log('Base de datos inicializada')
@@ -56,3 +56,7 @@ sequelize.sync().then(function() {
         };
     });
 });
+
+// Importamos el fichero de las constantes
+var Constantes = require(path.join(__dirname, 'constants'));
+exports.Constantes = Constantes;
