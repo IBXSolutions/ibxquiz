@@ -1,7 +1,7 @@
 var models = require('../models/models.js');
 var constantes = models.Constantes;
 
-// Autoload - factoriza el código si ruta incluye :quizId
+// Autoload - factoriza req.quiz si ruta incluye :quizId
 exports.load = function(req, res, next, quizId) {
     models.Quiz.find(quizId).then(
         function(quiz) {
@@ -43,7 +43,7 @@ exports.index = function(req, res) {
     var sqlBuscar;
     var cadenaBusca = "";
     if (req.query.buscar != "" && req.query.buscar != undefined) {
-        cadenaBusca = cadenaBusca + req.query.buscar;
+        cadenaBusca = cadenaBusca + req.query.buscar.trim();
         //escapa caracteres reservados de expresiones regulares
         cadenaBusca = cadenaBusca.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
         //Sustituye los espacios inermedios por %
@@ -52,7 +52,7 @@ exports.index = function(req, res) {
         cadenaBusca = "%" + cadenaBusca + "%";
         // Ahora montamos los parametros de Sequelize
         sqlBuscar = {
-            where: ["pregunta like ?", cadenaBusca],
+            where: ["lower(pregunta) like lower(?)", cadenaBusca],
             order: "pregunta"
         };
     } else {
@@ -124,7 +124,7 @@ exports.create = function(req, res, err) {
     quiz = models.Quiz.build(req.body.quiz);
     // Guardamos la nueva pregunta
     quiz.save({
-        fields: ["pregunta", "respuesta"]
+        fields: ["pregunta", "respuesta", "tema"]
     }).then(function() {
         //Y redireccionamos a la lista de preguntas
         console.log('Pregunta creada:\n' + quiz);
@@ -154,21 +154,22 @@ exports.edit = function(req, res) {
 exports.update = function(req, res) {
     req.quiz.pregunta = req.body.quiz.pregunta;
     req.quiz.respuesta = req.body.quiz.respuesta;
+    req.quiz.tema = req.body.quiz.tema;
     // Ahora guardamos
     req.quiz
         .save({
-            fields: ["pregunta", "respuesta"]
+            fields: ["pregunta", "respuesta", "tema"]
         }).then(function() {
             //Y redireccionamos a la lista de preguntas
-            console.log('Pregunta actualizada:\n' + req.quiz);
+            console.log('Pregunta actualizada:\n' + JSON.stringify(req.quiz));
             res.redirect('/quizes');
         }).catch(function(err) {
-            console.log('No se ha actualizado la pregunta:\n' + req.quiz);
+            console.log('No se ha actualizado la pregunta:\n' + JSON.stringify(req.quiz));
             console.log("Errores detectados al actualizar\n" + objToString(err));
             res.render('quizes/edit', {
                 title: constantes.TITULO,
                 errors: err,
-                quiz: quiz
+                quiz: req.quiz
             });
         });
 };

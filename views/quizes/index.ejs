@@ -5,23 +5,42 @@
         <input type="submit" value="Go">
     </form>
 </div>
+<p>&nbsp;</p>
 <div>
-<table id="tbPreguntas" style="max-width: 400px; margin: auto;">
-    <% var i; for (i=0; i < quizes.length; i++) { %>
-    <tr>
-        <td>
-            <a href="/quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a>
-        </td>
-        <td>
-            <a href="/quizes/<%= quizes[i].id %>/edit"><button type="button">editar</button></a>
-        </td>
-        <td>
-            <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
-                <button type="submit" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">borrar</button>
-            </form>
-        </td>
-    </tr>
-    <% } %>
-</table>
+    <table id="tbPreguntas" style="max-width: 400px; margin: auto;">
+        <thead>
+            <tr>
+                <th>Temática</th>
+                <th>Pregunta</th>
+                <th colspan="2">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% var i; for (i=0; i < quizes.length; i++) { %>
+                <tr>
+                    <td>
+                        <%= quizes[i].tema %>
+                    </td>
+                    <td>
+                        <a href="/quizes/<%= quizes[i].id %>">
+                            <%= quizes[i].pregunta %>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="/quizes/<%= quizes[i].id %>/edit">
+                            <button type="button">editar</button>
+                        </a>
+                    </td>
+                    <td>
+                        <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+                            <button type="submit" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">borrar</button>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
 </div>
-<a href="/quizes/new"><button type="button">Crear pregunta</button></a>
+<a href="/quizes/new">
+    <button type="button">Crear pregunta</button>
+</a>
