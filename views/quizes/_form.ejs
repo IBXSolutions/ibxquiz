@@ -1,21 +1,24 @@
+<p>&nbsp;</p>
 <p>
     <label for="preg" class="rem">Pregunta</label>
-    <input type="text" id="preg" name="quiz[pregunta]" value="<%= quiz.pregunta %>" />
+    <input type="text" id="preg" name="quiz[pregunta]" <% if (quiz.pregunta === 'Tu pregunta') {%> placeholder="<%= quiz.pregunta %>" <%} else {%> value="<%= quiz.pregunta %>"<%}%> />
 </p>
 <p>
     <label for="resp" class="rem">Respuesta</label>
-    <input type="text" id="resp" name="quiz[respuesta]" value="<%= quiz.respuesta %>" />
+    <input type="text" id="resp" name="quiz[respuesta]" <% if (quiz.pregunta === 'Tu pregunta') {%> placeholder="<%= quiz.respuesta %>" <%} else {%> value="<%= quiz.respuesta %>"<%}%> />
 </p>
 <p>
     <label for="tema" class="rem">Temática</label>
     <select name="quiz[tema]">
-        <option value="">Seleccione un tema</option>
+        <option value="" <% if (!quiz.tema) { %>selected="selected"<% } %>>Seleccione un tema</option>
         <option value="Humanidades" <% if (quiz.tema == 'Humanidades') { %>selected="selected"<% } %>>Humanidades</option>
         <option value="Ocio" <% if (quiz.tema == 'Ocio') { %>selected="selected"<% } %>>Ocio</option>
         <option value="Ciencia" <% if (quiz.tema == 'Ciencia') { %>selected="selected"<% } %>>Ciencia</option>
         <option value="Tecnología" <% if (quiz.tema == 'Tecnología') { %>selected="selected"<% } %>>Tecnología</option>
         <option value="Geografía" <% if (quiz.tema == 'Geografía') { %>selected="selected"<% } %>>Geografía</option>
     </select>
+    <br><br>
+</p>
 <p>
     <a href="/quizes"><button type="button">Cancelar</button></a>
     <input type="submit" value="Salvar">

@@ -38,7 +38,7 @@ nav span {
     width: 100%;
 }
 #tbPreguntas td {
-    padding: 10px;
+    padding: 5px;
 }
 #ErrorMsgs {
     color: #f61;
@@ -46,4 +46,8 @@ nav span {
 }
 .right {
     float: right;
+}
+.tablaCentrada {
+    max-width: 400px;
+    margin: auto;
 }

@@ -49,7 +49,8 @@ exports.author = function(req, res) {
 exports.index = function(req, res) {
     var sqlBuscar;
     var cadenaBusca = "";
-    if (req.query.buscar != "" && req.query.buscar != undefined) {
+    var soloTema = "";
+    if ( (req.query.buscar != "" && req.query.buscar != undefined) || (req.query.verTema != "" && req.query.verTema != undefined)) {
         cadenaBusca = cadenaBusca + req.query.buscar.trim();
         //escapa caracteres reservados de expresiones regulares
         cadenaBusca = cadenaBusca.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
@@ -57,15 +58,25 @@ exports.index = function(req, res) {
         cadenaBusca = cadenaBusca.replace(/\s+/g, "%");
         //Añadimos los % en los extremos
         cadenaBusca = "%" + cadenaBusca + "%";
+        console.log('cadenaBusca: ' + cadenaBusca);
+
+        //Ahora vemos si hay filtro por tema
+        soloTema = soloTema + req.query.verTema.trim();
+        //escapa caracteres reservados de expresiones regulares
+        soloTema = soloTema.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
+        //Sustituye los espacios inermedios por %
+        soloTema = soloTema.replace(/\s+/g, "%");
+        //Añadimos los % en los extremos
+        soloTema = "%" + soloTema + "%";
         // Ahora montamos los parametros de Sequelize
         sqlBuscar = {
-            where: ["lower(pregunta) like lower(?)", cadenaBusca],
-            order: "pregunta"
+            where: ["upper(pregunta) like upper(?) and upper(tema) like upper(?)", cadenaBusca, soloTema],
+            order: "tema ASC, pregunta ASC"
         };
     } else {
         sqlBuscar = {
             where: ["1=1"],
-            order: "pregunta"
+            order: "tema ASC, pregunta ASC"
         };
     }
     console.log(sqlBuscar);

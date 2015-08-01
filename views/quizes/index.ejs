@@ -1,31 +1,58 @@
 <div>
     <form method="get" action="/quizes/">
-        <label for="buscar">Search a question</label>
-        <input type="text" maxlength="50" id="buscar" name="buscar">
-        <input type="submit" value="Go">
+        <fieldset>
+            <legend>Search quizes:</legend>
+            <table class="tablaCentrada">
+                <tr>
+                    <td>
+                        <label for="verTema"> Topic: </label>
+                        <select name="verTema" id="verTema">
+                            <option value="" selected>Todos</option>
+                            <option value="Humanidades">Humanidades</option>
+                            <option value="Ocio">Ocio</option>
+                            <option value="Ciencia">Ciencia</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Geografía">Geografía</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label for="buscar"> Term: </label>
+                        <input type="text" maxlength="50" id="buscar" name="buscar" />
+                    </td>
+                    <td>
+                        <input type="submit" value="Go">
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
     </form>
 </div>
 <p>&nbsp;</p>
 <div>
-    <table id="tbPreguntas" style="max-width: 400px; margin: auto;">
+    <table id="tbPreguntas" class="tablaCentrada">
         <thead>
             <tr>
-                <th>Temática</th>
-                <th>Pregunta</th>
-                <th colspan="2">Acciones</th>
+                <th>Topic</th>
+                <th>Quiz</th>
+                <% if (session.user) { %>
+                <th colspan="2">Actions</th>
+                <% } %>
             </tr>
         </thead>
         <tbody>
             <% var i; for (i=0; i < quizes.length; i++) { %>
                 <tr>
                     <td>
-                        <%= quizes[i].tema %>
+                        <a href="/quizes/?verTema=<%= quizes[i].tema %>&buscar=">
+                            <%= quizes[i].tema %>
+                        </a>
                     </td>
                     <td>
                         <a href="/quizes/<%= quizes[i].id %>">
                             <%= quizes[i].pregunta %>
                         </a>
                     </td>
+                    <% if (session.user) { %>
                     <td>
                         <a href="/quizes/<%= quizes[i].id %>/edit">
                             <button type="button">editar</button>
@@ -36,11 +63,14 @@
                             <button type="submit" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">borrar</button>
                         </form>
                     </td>
+                    <% } %>
                 </tr>
                 <% } %>
         </tbody>
     </table>
 </div>
+<% if (session.user) { %>
 <a href="/quizes/new">
     <button type="button">Crear pregunta</button>
 </a>
+<% } %>
