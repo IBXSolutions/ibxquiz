@@ -1,17 +1,37 @@
-//Definicion del modelo de Quiz
+//Definicion del modelo de la tabla Quizzzes
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Quiz', {
-        pregunta: {
-            type: DataTypes.STRING,
-            validate: { notEmpty: {msg: "--> Falta Pregunta"}}
-        },
-        respuesta: {
-            type: DataTypes.STRING,
-            validate: { notEmpty: {msg: "--> Falta Respuesta"}}
-        },
-        tema: {
-            type: DataTypes.STRING,
-            validate: { notEmpty: {msg: "--> Falta Temática"}}
-        }
-    });
+    var Quiz = sequelize.define(
+        'Quiz', {
+            pregunta: {
+                type: DataTypes.STRING,
+                validate: {
+                    notEmpty: {
+                        msg: "--> Falta Pregunta"
+                    }
+                }
+            },
+            respuesta: {
+                type: DataTypes.STRING,
+                validate: {
+                    notEmpty: {
+                        msg: "--> Falta Respuesta"
+                    }
+                }
+            },
+            tema: {
+                type: DataTypes.STRING,
+                validate: {
+                    notEmpty: {
+                        msg: "--> Falta Temática"
+                    }
+                }
+            }
+        }, {
+            classMethods: {
+                associate: function(models) {
+                    Quiz.hasMany(models.Comment)
+                }
+            }
+        });
+    return Quiz;
 }

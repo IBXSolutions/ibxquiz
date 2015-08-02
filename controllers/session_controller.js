@@ -13,7 +13,7 @@ exports.loginRequired = function (req, res, next) {
 // GET /login --> form de login
 exports.new = function(req, res) {
     var errors = req.session.errors || null;
-    req.session.errors = {};
+    req.session.errors = null;
 
     res.render('sessions/new', {
         title: constantes.TITULO,
@@ -48,7 +48,9 @@ exports.create = function(req, res) {
 
 // GET /logout --> Destruimos session (deberia ser DELETE)
 exports.destroy = function(req, res) {
-    delete req.session.user;
+    var actUrl = req.session.redir.toString();
+    //delete req.session.user;
+    req.session.destroy();
     // Redireccionamos al path anterior
-    res.redirect(req.session.redir.toString());
+    res.redirect(actUrl);
 }

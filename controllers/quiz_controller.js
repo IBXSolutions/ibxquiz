@@ -7,9 +7,7 @@ exports.load = function(req, res, next, quizId) {
         where: {
             id: Number(quizId)
         },
-        include: [{
-            model: models.Comment
-        }]
+        include: [models.Comment]
     }).then(
         function(quiz) {
             if (quiz) {
@@ -151,7 +149,7 @@ exports.create = function(req, res, err) {
         res.redirect('/quizes');
     }).catch(function(err) {
         console.log('No se ha creado la pregunta:\n' + quiz);
-        console.log("Errores detectados\n" + objToString(err));
+        console.error(err);
         res.render('quizes/new', {
             title: constantes.TITULO,
             errors: err,
@@ -185,7 +183,7 @@ exports.update = function(req, res) {
             res.redirect('/quizes');
         }).catch(function(err) {
             console.log('No se ha actualizado la pregunta:\n' + JSON.stringify(req.quiz));
-            console.log("Errores detectados al actualizar\n" + objToString(err));
+            console.error(err);
             res.render('quizes/edit', {
                 title: constantes.TITULO,
                 errors: err,
@@ -205,15 +203,4 @@ exports.borrar = function(req, res) {
             console.error(error);
             next(error);
         });
-};
-
-// Otras funciones utiles
-function objToString(obj) {
-    var str = '';
-    for (var p in obj) {
-        if (obj.hasOwnProperty(p)) {
-            str += p + '::' + obj[p] + '\n';
-        }
-    }
-    return str;
 };
