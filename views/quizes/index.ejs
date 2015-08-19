@@ -38,43 +38,45 @@
     <div class="panel-heading">
         <h4 class="panel-title">List of Quizzes</h4>
     </div>
-    <table id="tbPreguntas" class="table table-hover">
-        <thead>
-            <tr>
-                <th style="width: 25%;">Topic</th>
-                <th>Quiz</th>
-                <% if (session.user) { %>
-                    <th style="width: 20%;">Actions</th>
-                    <% } %>
-            </tr>
-        </thead>
-        <tbody>
-            <% var i; for (i=0; i < quizes.length; i++) { %>
+    <div class="table-responsive">
+        <table id="tbPreguntas" class="table table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        <a href="/quizes/?verTema=<%= quizes[i].tema %>&buscar=">
-                            <%= quizes[i].tema %>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="/quizes/<%= quizes[i].id %>">
-                            <%= quizes[i].pregunta %>
-                        </a>
-                    </td>
+                    <th class="col-md-2">Topic</th>
+                    <th>Quiz</th>
                     <% if (session.user) { %>
-                        <td>
-                            <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
-                                <div class="btn-group" role="group" aria-label="actions">
-                                    <a href="/quizes/<%= quizes[i].id %>/edit" class="btn btn-primary" role="button">edit</a>
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">delete</button>
-                                </div>
-                            </form>
-                        </td>
+                        <th class="col-md-3">Actions</th>
                         <% } %>
                 </tr>
-                <% } %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% var i; for (i=0; i < quizes.length; i++) { %>
+                    <tr>
+                        <td>
+                            <a href="/quizes/?verTema=<%= quizes[i].tema %>&buscar=">
+                                <%= quizes[i].tema %>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/quizes/<%= quizes[i].id %>">
+                                <%= quizes[i].pregunta %>
+                            </a>
+                        </td>
+                        <% if (session.user) { %>
+                            <td style="white-space: nowrap">
+                                <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+                                    <div class="btn-group" role="group" aria-label="actions">
+                                        <a href="/quizes/<%= quizes[i].id %>/edit" class="btn btn-sm btn-primary" role="button">edit</a>
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">delete</button>
+                                    </div>
+                                </form>
+                            </td>
+                            <% } %>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
     <% if (session.user) { %>
         <div class="panel-footer text-center">
             <a href="/quizes/new" role="button" class="btn btn-success">Create new Quiz</a>
