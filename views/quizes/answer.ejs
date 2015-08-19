@@ -1,3 +1,11 @@
-
-<p>Your answer <em><%= respuesta %></em> is <strong><%= resultado %></strong></p>
-<p><a href="/quizes/<%= quiz.id %>">Try it again?</a></p>
+<div class="text-center">
+    <h3>Results</h3>
+    <p>Your answer
+        <mark><%= respuesta %></mark> is
+        <strong>
+            <%= resultado %>
+        </strong>
+    </p>
+    <hr>
+    <p><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> <a href="/quizes/<%= quiz.id %>">Try it again?</a></p>
+</div>

@@ -1,0 +1,21 @@
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4 class="panel-title">Add Comment</h4>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" action="/quizes/<%= quizid %>/comments">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Your comment</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" id="comment" name="comment[texto]" rows="4" maxlength="255"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <button class="btn btn-success" type="submit">Save it!</button>
+                    <a href="/quizes/<%= quizid %>" class="btn btn-default" role="button">Forget it!</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

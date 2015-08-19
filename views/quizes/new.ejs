@@ -1,4 +1,10 @@
-Añadir pregunta: <p>
-<form method="post" action="/quizes/create">
-    <% include _form.ejs %>
-</form>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4 class="panel-title">Add New Quiz</h4>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="post" action="/quizes/create">
+            <% include _form.ejs %>
+        </form>
+    </div>
+</div>

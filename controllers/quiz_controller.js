@@ -3,7 +3,12 @@ var constantes = models.Constantes;
 
 // Autoload - factoriza req.quiz si ruta incluye :quizId
 exports.load = function(req, res, next, quizId) {
-    models.Quiz.find(quizId).then(
+    models.Quiz.find({
+        where: {
+            id: Number(quizId)
+        },
+        include: [models.Comment]
+    }).then(
         function(quiz) {
             if (quiz) {
                 req.quiz = quiz;
@@ -20,21 +25,21 @@ exports.load = function(req, res, next, quizId) {
 
 // GET home_page
 exports.home = function(req, res) {
-  res.render('index', {
-      title: constantes.TITULO,
-      errors: null
-   });
+    res.render('index', {
+        title: constantes.TITULO,
+        errors: null
+    });
 };
 
 // GET About us
-exports.author = function(req,res) {
+exports.author = function(req, res) {
     res.render('author', {
         title: constantes.TITULO,
         author: constantes.AUTHORNAME,
         nick: constantes.AUTHORNICK,
         imagen: constantes.AUTHORIMG,
         errors: null
-        });
+    });
 };
 
 
@@ -42,7 +47,8 @@ exports.author = function(req,res) {
 exports.index = function(req, res) {
     var sqlBuscar;
     var cadenaBusca = "";
-    if (req.query.buscar != "" && req.query.buscar != undefined) {
+    var soloTema = "";
+    if ( (req.query.buscar !== "" && req.query.buscar !== undefined) || (req.query.verTema !== "" && req.query.verTema !== undefined)) {
         cadenaBusca = cadenaBusca + req.query.buscar.trim();
         //escapa caracteres reservados de expresiones regulares
         cadenaBusca = cadenaBusca.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
@@ -50,15 +56,25 @@ exports.index = function(req, res) {
         cadenaBusca = cadenaBusca.replace(/\s+/g, "%");
         //Añadimos los % en los extremos
         cadenaBusca = "%" + cadenaBusca + "%";
+        console.log('cadenaBusca: ' + cadenaBusca);
+
+        //Ahora vemos si hay filtro por tema
+        soloTema = soloTema + req.query.verTema.trim();
+        //escapa caracteres reservados de expresiones regulares
+        soloTema = soloTema.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
+        //Sustituye los espacios inermedios por %
+        soloTema = soloTema.replace(/\s+/g, "%");
+        //Añadimos los % en los extremos
+        soloTema = "%" + soloTema + "%";
         // Ahora montamos los parametros de Sequelize
         sqlBuscar = {
-            where: ["lower(pregunta) like lower(?)", cadenaBusca],
-            order: "pregunta"
+            where: ["upper(pregunta) like upper(?) and upper(tema) like upper(?)", cadenaBusca, soloTema],
+            order: "tema ASC, pregunta ASC"
         };
     } else {
         sqlBuscar = {
             where: ["1=1"],
-            order: "pregunta"
+            order: "tema ASC, pregunta ASC"
         };
     }
     console.log(sqlBuscar);
@@ -66,6 +82,7 @@ exports.index = function(req, res) {
     // Finalmente realizamos la busqueda en bbdd
     models.Quiz.findAll(sqlBuscar).then(
         function(quizes) {
+
             res.render('quizes/index', {
                 title: constantes.TITULO,
                 quizes: quizes,
@@ -79,6 +96,7 @@ exports.index = function(req, res) {
 
 //GET /quizes/show
 exports.show = function(req, res) {
+    console.log('Mostrando el quiz:\n' + JSON.stringify(req.quiz));
     res.render('quizes/show', {
         title: constantes.TITULO,
         quiz: req.quiz,
@@ -88,22 +106,30 @@ exports.show = function(req, res) {
 
 //GET /quizes/answer
 exports.answer = function(req, res) {
-    var vResultado = 'Wrong'
-    var laRespuesta = req.query.respuesta;
-    //escapa caracteres reservados de expresiones regulares
-    laRespuesta = laRespuesta.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
-    models.Quiz.find(req.params.quizId).then(function(quiz) {
-        if (laRespuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
-            vResultado = 'Correct';
-        }
-        res.render('quizes/answer', {
-            title: constantes.TITULO,
-            resultado: vResultado,
-            respuesta: laRespuesta,
-            quiz: req.quiz,
-            errors: null
+    var vResultado = 'Wrong';
+    if (req.query.respuesta) {
+        var laRespuesta = req.query.respuesta;
+        //escapa caracteres reservados de expresiones regulares
+        laRespuesta = laRespuesta.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
+        models.Quiz.find(req.params.quizId).then(function(quiz) {
+            if (laRespuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
+                vResultado = 'Correct';
+            }
+            res.render('quizes/answer', {
+                title: constantes.TITULO,
+                resultado: vResultado,
+                respuesta: laRespuesta,
+                quiz: req.quiz,
+                errors: null
+            });
         });
-    });
+     } else {
+         res.render('quizes/show', {
+             title: constantes.TITULO,
+             quiz: req.quiz,
+             errors: {'ERROR:': 'No has respondido nada'}
+         });
+     }
 };
 
 // GET /quizes/new
@@ -117,7 +143,7 @@ exports.new = function(req, res) {
         quiz: quiz,
         errors: null
     });
-}
+};
 
 // POST /quizes/create
 exports.create = function(req, res, err) {
@@ -131,7 +157,7 @@ exports.create = function(req, res, err) {
         res.redirect('/quizes');
     }).catch(function(err) {
         console.log('No se ha creado la pregunta:\n' + quiz);
-        console.log("Errores detectados\n" + objToString(err));
+        console.error(err);
         res.render('quizes/new', {
             title: constantes.TITULO,
             errors: err,
@@ -165,7 +191,7 @@ exports.update = function(req, res) {
             res.redirect('/quizes');
         }).catch(function(err) {
             console.log('No se ha actualizado la pregunta:\n' + JSON.stringify(req.quiz));
-            console.log("Errores detectados al actualizar\n" + objToString(err));
+            console.error(err);
             res.render('quizes/edit', {
                 title: constantes.TITULO,
                 errors: err,
@@ -185,15 +211,4 @@ exports.borrar = function(req, res) {
             console.error(error);
             next(error);
         });
-};
-
-// Otras funciones utiles
-function objToString(obj) {
-    var str = '';
-    for (var p in obj) {
-        if (obj.hasOwnProperty(p)) {
-            str += p + '::' + obj[p] + '\n';
-        }
-    }
-    return str;
 };

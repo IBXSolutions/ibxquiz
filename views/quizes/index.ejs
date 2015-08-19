@@ -1,46 +1,85 @@
-<div>
-    <form method="get" action="/quizes/">
-        <label for="buscar">Search a question</label>
-        <input type="text" maxlength="50" id="buscar" name="buscar">
-        <input type="submit" value="Go">
-    </form>
+<div class="panel-group" role="tablist">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="collapseSearchHeading">
+            <a class="" role="button" data-toggle="collapse" href="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
+                Search quizes <span class="caret"></span>
+            </a>
+        </div>
+        <div id="collapseSearch" class="panel-collapse collapse" aria-expanded="false" role="tabpanel" aria-labelledby="collapseSearchHeading">
+            <div class="panel-body">
+                <form method="get" action="/quizes/" class="form-inline text-center">
+                    <div class="form-group form-group-sm">
+                        <label for="verTema">Topic</label>
+                        <select class="form-control" name="verTema" id="verTema">
+                            <option value="" selected>All topics</option>
+                            <option value="Humanidades">Humanidades</option>
+                            <option value="Ocio">Ocio</option>
+                            <option value="Ciencia">Ciencia</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Geografía">Geografía</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="buscar"> Term: </label>
+                        <input class="form-control" type="text" maxlength="50" id="buscar" name="buscar" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default btn-sm" type="submit">
+                            <span class="glyphicon glyphicon-search"></span> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<p>&nbsp;</p>
-<div>
-    <table id="tbPreguntas" style="max-width: 400px; margin: auto;">
-        <thead>
-            <tr>
-                <th>Temática</th>
-                <th>Pregunta</th>
-                <th colspan="2">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% var i; for (i=0; i < quizes.length; i++) { %>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4 class="panel-title">List of Quizzes</h4>
+    </div>
+    <div class="table-responsive">
+        <table id="tbPreguntas" class="table table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        <%= quizes[i].tema %>
-                    </td>
-                    <td>
-                        <a href="/quizes/<%= quizes[i].id %>">
-                            <%= quizes[i].pregunta %>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="/quizes/<%= quizes[i].id %>/edit">
-                            <button type="button">editar</button>
-                        </a>
-                    </td>
-                    <td>
-                        <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
-                            <button type="submit" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">borrar</button>
-                        </form>
-                    </td>
+                    <th class="col-md-2">Topic</th>
+                    <th>Quiz</th>
+                    <% if (session.user) { %>
+                        <th class="col-md-3">Actions</th>
+                        <% } %>
                 </tr>
-                <% } %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% var i; for (i=0; i < quizes.length; i++) { %>
+                    <tr>
+                        <td>
+                            <a href="/quizes/?verTema=<%= quizes[i].tema %>&buscar=">
+                                <%= quizes[i].tema %>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/quizes/<%= quizes[i].id %>">
+                                <%= quizes[i].pregunta %>
+                            </a>
+                        </td>
+                        <% if (session.user) { %>
+                            <td style="white-space: nowrap">
+                                <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+                                    <div class="btn-group" role="group" aria-label="actions">
+                                        <a href="/quizes/<%= quizes[i].id %>/edit" class="btn btn-sm btn-primary" role="button">edit</a>
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">delete</button>
+                                    </div>
+                                </form>
+                            </td>
+                            <% } %>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+    <% if (session.user) { %>
+        <div class="panel-footer text-center">
+            <a href="/quizes/new" role="button" class="btn btn-success">Create new Quiz</a>
+        </div>
+    <% } %>
 </div>
-<a href="/quizes/new">
-    <button type="button">Crear pregunta</button>
-</a>

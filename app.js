@@ -1,4 +1,3 @@
-console.log('aqui');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -7,13 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var partials = require('express-partials');
 var methodOverride = require('method-override');
-
+var session = require('express-session');
 
 //Importamos nuestro router
 var routes = require('./routes/index');
 // Importamos las constantes
 var models = require('./models/models');
 var constantes = models.Constantes;
+var criptoSeed = 'unasemillaparaencriptar';
 
 var app = express();
 
@@ -26,14 +26,58 @@ app.use(partials());
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(cookieParser(criptoSeed));
+
+// Instalamos express-session con parametros de inicialización
+app.use(session({
+    secret: criptoSeed,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false
+    }
+}));
+
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Helpers dinamicos:
+app.use(function(req, res, next) {
+    var sess = req.session;
+
+    // console.log("******El url que tenemos en app.js es: " + req.url.toString());
+    // if (sess.redir !== undefined) {
+    //     console.log("******El sess.redir que tenemos en app.js antes de actualizarlo es: " + sess.redir.toString());
+    // }
+
+    // guardar path en session.redir para despues de login/logout
+    if (!req.path.match(/\/login|\/logout/)) {
+        sess.redir = req.url.replace("favico.ico","");
+    }
+
+    // Desconectar auto-logout de sesion por mas de dos minutos
+    if (sess.lastClick) {
+        var lastClick = new Date().getTime();
+        var intervalo = lastClick - sess.lastClick;
+        console.log("intervalo: "+sess.lastClick);
+        if (intervalo > (5 * 60 * 1000)) {
+            delete sess.lastClick;
+            sess.autoLogout = true;
+            res.redirect("/logout");
+        } else {
+            sess.autoLogout = false;
+            sess.lastClick = lastClick;
+        }
+    }
+    //Hacer visible req.session en las vistas
+    res.locals.session = sess;
+    next();
+});
 
 app.use('/', routes);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
