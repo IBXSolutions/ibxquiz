@@ -1,27 +1,60 @@
-<form method="get" action="/quizes/<%= quiz.id %>/answer">
-    Question:
-    <%= quiz.pregunta %>
-        <br/>
-        <input type="text" name="respuesta" placeholder="Your answer here" autofocus>
-        <input type="submit" value="Send">
-</form>
-<p>
-    <a href="/quizes/<%= quiz.id %>/comments/new">
-        <button>Add new comment</button>
-    </a>
-</p>
-<p>
-    <strong>Comments:</strong>
-</p>
-<% for (index in quiz.comments) {%>
-    <% if (quiz.comments[index].publicado || session.user) { %>
-        <p>-
-            <%= quiz.comments[index].texto %>
-            <% if (session.user && !quiz.comments[index].publicado) { %>
-                <a href="/quizes/<%=quiz.id %>/comments/<%= quiz.comments[index].id %>/publish">
-                    <button>Publish</button>
-                </a>
-            <% } %>
-        </p>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4 class="panel-title">Squeeze your mind</h4>
+    </div>
+    <div class="panel-body">
+        <form class="form-horizontal" method="get" action="/quizes/<%= quiz.id %>/answer">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Question</label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <%= quiz.pregunta %>
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Your answer</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="text" id="respuesta" name="respuesta" placeholder="Your answer here" autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <button type="submit" class="btn btn-default">Send your Answer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="panel-footer text-center">
+        <a href="/quizes"><span class="glyphicon glyphicon-list"></span> Back to list</a>
+    </div>
+</div>
+<hr/>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title">Comments</h4>
+    </div>
+    <% if (quiz.comments.length > 0) { %>
+    <div class="panel-body">
+        <blockquote>
+            <% for (index in quiz.comments) {%>
+                <ul>
+                    <% if (quiz.comments[index].publicado || session.user) { %>
+                        <li>
+                            <%= quiz.comments[index].texto %>
+                            <% if (session.user && !quiz.comments[index].publicado) { %>
+                                <a class="btn btn-xs btn-success" role="button" href="/quizes/<%=quiz.id %>/comments/<%= quiz.comments[index].id %>/publish">
+                                    Publish
+                                </a>
+                            <% } %>
+                        </li>
+                        <% } %>
+                </ul>
+                <% } %>
+        </blockquote>
+    </div>
     <% } %>
-<% } %>
+    <div class="panel-footer text-center">
+        <a href="/quizes/<%= quiz.id %>/comments/new" class="btn btn-default" role="button">Add new comment</a>
+    </div>
+</div>

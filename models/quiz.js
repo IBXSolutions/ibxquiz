@@ -1,4 +1,4 @@
-//Definicion del modelo de la tabla Quizzzes
+//Definicion del modelo de la tabla Quizzes
 module.exports = function(sequelize, DataTypes) {
     var Quiz = sequelize.define(
         'Quiz', {
@@ -29,9 +29,9 @@ module.exports = function(sequelize, DataTypes) {
         }, {
             classMethods: {
                 associate: function(models) {
-                    Quiz.hasMany(models.Comment)
+                    Quiz.hasMany(models.Comment);
                 }
             }
         });
     return Quiz;
-}
+};

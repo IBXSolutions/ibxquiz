@@ -48,7 +48,7 @@ exports.index = function(req, res) {
     var sqlBuscar;
     var cadenaBusca = "";
     var soloTema = "";
-    if ( (req.query.buscar != "" && req.query.buscar != undefined) || (req.query.verTema != "" && req.query.verTema != undefined)) {
+    if ( (req.query.buscar !== "" && req.query.buscar !== undefined) || (req.query.verTema !== "" && req.query.verTema !== undefined)) {
         cadenaBusca = cadenaBusca + req.query.buscar.trim();
         //escapa caracteres reservados de expresiones regulares
         cadenaBusca = cadenaBusca.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
@@ -106,22 +106,30 @@ exports.show = function(req, res) {
 
 //GET /quizes/answer
 exports.answer = function(req, res) {
-    var vResultado = 'Wrong'
-    var laRespuesta = req.query.respuesta;
-    //escapa caracteres reservados de expresiones regulares
-    laRespuesta = laRespuesta.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
-    models.Quiz.find(req.params.quizId).then(function(quiz) {
-        if (laRespuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
-            vResultado = 'Correct';
-        }
-        res.render('quizes/answer', {
-            title: constantes.TITULO,
-            resultado: vResultado,
-            respuesta: laRespuesta,
-            quiz: req.quiz,
-            errors: null
+    var vResultado = 'Wrong';
+    if (req.query.respuesta) {
+        var laRespuesta = req.query.respuesta;
+        //escapa caracteres reservados de expresiones regulares
+        laRespuesta = laRespuesta.replace(/([\$\(\)\*\+\.\[\]\?\\\/\^\{\}\|])/g, "\\$1");
+        models.Quiz.find(req.params.quizId).then(function(quiz) {
+            if (laRespuesta.toUpperCase() === req.quiz.respuesta.toUpperCase()) {
+                vResultado = 'Correct';
+            }
+            res.render('quizes/answer', {
+                title: constantes.TITULO,
+                resultado: vResultado,
+                respuesta: laRespuesta,
+                quiz: req.quiz,
+                errors: null
+            });
         });
-    });
+     } else {
+         res.render('quizes/show', {
+             title: constantes.TITULO,
+             quiz: req.quiz,
+             errors: {'ERROR:': 'No has respondido nada'}
+         });
+     }
 };
 
 // GET /quizes/new
@@ -135,7 +143,7 @@ exports.new = function(req, res) {
         quiz: quiz,
         errors: null
     });
-}
+};
 
 // POST /quizes/create
 exports.create = function(req, res, err) {

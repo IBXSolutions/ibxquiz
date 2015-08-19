@@ -1,53 +1,90 @@
-* {
-    margin: 0;
-    padding: 0;
-}
 body {
-    padding: 50px;
-    font: 16px Georgia, serif;
+    padding-top: 55px;
+    padding-bottom: 20px;
 }
-#page-wrap {
-    margin: 2% auto;
-    color: white;
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header, .footer {
+    padding-right: 15px;
+    padding-left: 15px;
 }
-#page-wrap > .main {
-    border: 1px solid #999;
-    padding: 1%;
-    margin-bottom: 1px;
-    color: black;
+
+/* Custom page header */
+.header {
+    padding-right: 20px;
+    text-align: right;
 }
-section > div {
-    padding: 20px;
-}
-header, nav, section, footer {
-    background: #eee;
+
+/* Custom page footer */
+.footer {
     text-align: center;
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
 }
-nav span {
-    margin: 0px 10px 0px 0px;
+.jumbotron {
+    text-align: center;
+    border-bottom: 1px solid #e5e5e5;
 }
-#credits {
-    clear: both;
-    min-height: 100px;
+
+/* Contenedor principal*/
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 730px;
+    }
 }
-#credits img {
-    float: left;
-    height: 100px;
+
+/* Responsive: Portrait tablets and up */
+
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .header, .marketing, .footer {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    /* Space out the masthead */
+    .header {
+        margin-bottom: 30px;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+        border-bottom: 0;
+    }
 }
-#tbPreguntas {
-    width: 100%;
+
+/* Formulario de login */
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
-#tbPreguntas td {
-    padding: 5px;
+.form-signin .form-signin-heading, .form-signin .checkbox {
+    margin-bottom: 10px;
 }
-#ErrorMsgs {
-    color: #f61;
-    font-size: smaller;
+.form-signin .checkbox {
+    font-weight: normal;
 }
-.right {
-    float: right;
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
 }
-.tablaCentrada {
-    max-width: 400px;
-    margin: auto;
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+.form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }

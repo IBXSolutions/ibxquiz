@@ -1,6 +1,16 @@
-<h2>About Us</h2>
-<div id="credits">
-    <img src="<%= imagen %>" alt="<%= author %>" title="<%= author %>"
-    <p>Project: <%= title %></p>
-    <p>Author: <%= author %> (<%= nick %>)</p>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4>About Us</h4>
+    </div>
+    <div class="panel-body">
+        <div class="media">
+            <div class="media-left">
+                <img class="media-object img-thumbnail" src="<%= imagen %>" alt="<%= author %>" title="<%= author %>" />
+            </div>
+            <div class="media-body">
+                <p class="media-heading lead">Project: <%= title %></p>
+                <p>Author: <%= author %> (<%= nick %>)</p>
+            </div>
+        </div>
+    </div>
 </div>

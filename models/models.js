@@ -78,7 +78,7 @@ sequelize.sync()
                             tema: 'Geografía'
                         })
                         .then(function() {
-                            console.log('Primer registro creado')
+                            console.log('Primer registro creado');
                         });
                     db.Quiz.create({
                             pregunta: 'Capital de España',
@@ -86,9 +86,9 @@ sequelize.sync()
                             tema: 'Geografía'
                         })
                         .then(function() {
-                            console.log('Base de datos inicializada')
+                            console.log('Base de datos inicializada');
                         });
-                };
+                }
             });
     });
 

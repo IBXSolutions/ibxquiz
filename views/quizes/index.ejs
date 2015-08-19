@@ -1,42 +1,51 @@
-<div>
-    <form method="get" action="/quizes/">
-        <fieldset>
-            <legend>Search quizes:</legend>
-            <table class="tablaCentrada">
-                <tr>
-                    <td>
-                        <label for="verTema"> Topic: </label>
-                        <select name="verTema" id="verTema">
-                            <option value="" selected>Todos</option>
+<div class="panel-group" role="tablist">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="collapseSearchHeading">
+            <a class="" role="button" data-toggle="collapse" href="#collapseSearch" aria-expanded="false" aria-controls="collapseSearch">
+                Search quizes <span class="caret"></span>
+            </a>
+        </div>
+        <div id="collapseSearch" class="panel-collapse collapse" aria-expanded="false" role="tabpanel" aria-labelledby="collapseSearchHeading">
+            <div class="panel-body">
+                <form method="get" action="/quizes/" class="form-inline text-center">
+                    <div class="form-group form-group-sm">
+                        <label for="verTema">Topic</label>
+                        <select class="form-control" name="verTema" id="verTema">
+                            <option value="" selected>All topics</option>
                             <option value="Humanidades">Humanidades</option>
                             <option value="Ocio">Ocio</option>
                             <option value="Ciencia">Ciencia</option>
                             <option value="Tecnología">Tecnología</option>
                             <option value="Geografía">Geografía</option>
                         </select>
-                    </td>
-                    <td>
+                    </div>
+                    <div class="form-group form-group-sm">
                         <label for="buscar"> Term: </label>
-                        <input type="text" maxlength="50" id="buscar" name="buscar" />
-                    </td>
-                    <td>
-                        <input type="submit" value="Go">
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-    </form>
+                        <input class="form-control" type="text" maxlength="50" id="buscar" name="buscar" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default btn-sm" type="submit">
+                            <span class="glyphicon glyphicon-search"></span> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-<p>&nbsp;</p>
-<div>
-    <table id="tbPreguntas" class="tablaCentrada">
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h4 class="panel-title">List of Quizzes</h4>
+    </div>
+    <table id="tbPreguntas" class="table table-hover">
         <thead>
             <tr>
-                <th>Topic</th>
+                <th style="width: 25%;">Topic</th>
                 <th>Quiz</th>
                 <% if (session.user) { %>
-                <th colspan="2">Actions</th>
-                <% } %>
+                    <th style="width: 20%;">Actions</th>
+                    <% } %>
             </tr>
         </thead>
         <tbody>
@@ -53,24 +62,22 @@
                         </a>
                     </td>
                     <% if (session.user) { %>
-                    <td>
-                        <a href="/quizes/<%= quizes[i].id %>/edit">
-                            <button type="button">editar</button>
-                        </a>
-                    </td>
-                    <td>
-                        <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
-                            <button type="submit" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">borrar</button>
-                        </form>
-                    </td>
-                    <% } %>
+                        <td>
+                            <form method="post" action="/quizes/<%= quizes[i].id %>?_method=delete">
+                                <div class="btn-group" role="group" aria-label="actions">
+                                    <a href="/quizes/<%= quizes[i].id %>/edit" class="btn btn-primary" role="button">edit</a>
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('¿Borrar: <%= quizes[i].pregunta %>?')">delete</button>
+                                </div>
+                            </form>
+                        </td>
+                        <% } %>
                 </tr>
                 <% } %>
         </tbody>
     </table>
+    <% if (session.user) { %>
+        <div class="panel-footer text-center">
+            <a href="/quizes/new" role="button" class="btn btn-success">Create new Quiz</a>
+        </div>
+    <% } %>
 </div>
-<% if (session.user) { %>
-<a href="/quizes/new">
-    <button type="button">Crear pregunta</button>
-</a>
-<% } %>
