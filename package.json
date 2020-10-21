@@ -11,7 +11,8 @@
   },
   "devDependencies": {
     "sqlite3": "^3.0.9",
-    "sequelize": ">=4.44.4"
+    "sequelize": ">=4.44.4",
+     "morgan": ">=1.9.1"
   },
   "dependencies": {
     "body-parser": "~1.8.1",
